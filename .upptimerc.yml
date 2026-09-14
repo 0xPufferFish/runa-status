@@ -1,31 +1,48 @@
-# Change these first
-owner: upptime # Your GitHub organization or username, where this repository lives
-repo: upptime # The name of this repository
+# Runa Rent uptime monitor — checks every 5 minutes from GitHub Actions. A failed check opens a GitHub
+# issue assigned to the owner (GitHub notifies by email / mobile push) and closes it on recovery.
+# Production only. Endpoint rationale: runa/docs/aslan-map.md (hosting) and runa/MIGRATION.md.
+owner: 0xPufferFish
+repo: runa-status
 
 sites:
-  - name: Google
-    url: https://www.google.com
-  - name: Wikipedia
-    url: https://en.wikipedia.org
-  - name: Hacker News
-    url: https://news.ycombinator.com
-  - name: Secret Site
-    url: $SECRET_SITE
+  # The catalog SPA shell. The body is checked because on 2026-09-11 the host rebooted and served
+  # DomaiNesia's "your domain is ready" parking page with a 200.
+  - name: Catalog (runarent.com)
+    url: https://runarent.com/
+    __dangerous__body_down_if_text_missing: Runa Rent
+  # The API under the hostname both frontends call. /attire/attributes is what cat fetches at boot: it
+  # runs a dozen DB queries, so a DB outage answers 500 here. It records no telemetry — the list and
+  # detail routes record search / attire_view events, which a probe must never inflate.
+  - name: API (www.api.runarent.com)
+    url: https://www.api.runarent.com/v1/attire/attributes
+    __dangerous__body_down_if_text_missing: '"msg":"OK"'
+  # The same vhost under its canonical name, which DomaiNesia blocked on its own on 2026-09-14 while
+  # www.api stayed up. Red here and green above means a hostname block at the host, not aslan.
+  - name: API (api.runarent.com)
+    url: https://api.runarent.com/v1/attire/attributes
+    __dangerous__body_down_if_text_missing: '"msg":"OK"'
+  # Photos are served by Apache straight off disk, not by Node — they kept serving through the 09-14
+  # block. The logo is the one storage file no attire edit can delete (it is cat's og:image).
+  - name: Photos (storage)
+    url: https://api.runarent.com/storage/v1/logo.webp
+  - name: Panda (admin)
+    url: https://panda.runarent.com/
+    __dangerous__body_down_if_text_missing: Runa Panda
+
+assignees:
+  - 0xPufferFish
+
+# Strict allowlist: no repository secret besides GH_PAT reaches the Upptime action. A notification
+# channel added later (e.g. NOTIFICATION_TELEGRAM_*) must be listed here or it silently gets nothing.
+secrets: []
 
 status-website:
-  # Add your custom domain name, or remove the `cname` line if you don't have a domain
-  # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
-  cname: demo.upptime.js.org
-  # baseUrl: /your-repo-name
-  logoUrl: https://raw.githubusercontent.com/upptime/upptime.js.org/master/static/img/icon.svg
-  name: Upptime
-  introTitle: "**Upptime** is the open-source uptime monitor and status page, powered entirely by GitHub."
-  introMessage: This is a sample status page which uses **real-time** data from our [GitHub repository](https://github.com/upptime/upptime). No server required — just GitHub Actions, Issues, and Pages. [**Get your own for free**](https://github.com/upptime/upptime)
+  baseUrl: /runa-status
+  name: Runa Rent Status
+  introTitle: "Status layanan Runa Rent"
+  introMessage: Diperiksa otomatis setiap 5 menit.
   navbar:
     - title: Status
       href: /
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
-
-# Upptime also supports notifications, assigning issues, and more
-# See https://upptime.js.org/docs/configuration
