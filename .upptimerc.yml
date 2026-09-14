@@ -36,9 +36,22 @@ assignees:
 # channel added later (e.g. NOTIFICATION_TELEGRAM_*) must be listed here or it silently gets nothing.
 secrets: []
 
+# The history page's response-time chart (Chart.js) — Runa brand instead of Upptime's teal
+graphBackgroundColor: "rgba(138, 75, 90, 0.15)"
+graphBorderColor: "#8a4b5a"
+
 status-website:
   baseUrl: /runa-status
   name: Runa Rent Status
+  # Runa look (runarent.com): assets/runa.css, plus the logo and favicon copied into assets/ so the
+  # status page never loads anything from the DomaiNesia box it is reporting on.
+  theme: light
+  links:
+    - rel: stylesheet
+      href: https://0xpufferfish.github.io/runa-status/runa.css
+  logoUrl: https://0xpufferfish.github.io/runa-status/logo.webp
+  hideNavTitle: true
+  favicon: https://0xpufferfish.github.io/runa-status/favicon.ico
   introTitle: "Status layanan Runa Rent"
   introMessage: Diperiksa otomatis setiap 5 menit.
   navbar:

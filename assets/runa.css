@@ -1,0 +1,314 @@
+/*
+  Runa Rent theme for the Upptime status page — mirrors runarent.com (cat-vue): white, Lato,
+  brand mauve #8a4b5a (runa/shared tokens.css), rounded-2xl cards, tracking-widest headings.
+
+  Loaded through status-website.links in .upptimerc.yml, which puts it AFTER Upptime's
+  global.css, so equal specificity wins. Svelte's scoped component rules carry an extra class,
+  which is why a few selectors below are longer than they look like they need to be.
+*/
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
+
+:root {
+  --brand: #8a4b5a;
+  --brand-light: #a86278;
+  --brand-tint: rgb(138 75 90 / 0.08);
+  --ink: #1f2937;
+  --ink-soft: #6b7280;
+  --line: rgb(0 0 0 / 0.1);
+  --ok: #16a34a;
+  --bad: #dc2626;
+  --warn: #d97706;
+
+  /* Upptime's own theme variables (static/themes/light.css) */
+  --body-background-color: #ffffff;
+  --body-text-color: var(--ink);
+  --card-background-color: #ffffff;
+  --card-border-color: var(--line);
+  --nav-background-color: #ffffff;
+  --nav-border-bottom-color: #f3f4f6;
+  --nav-current-border-bottom-color: var(--brand);
+  --up-border-left-color: var(--line);
+  --down-border-left-color: #fecaca;
+  --degraded-border-left-color: #fde68a;
+  --down-background-color: #fef2f2;
+  --tag-color: #ffffff;
+  --tag-up-background-color: var(--ok);
+  --tag-down-background-color: var(--bad);
+  --tag-degraded-background-color: var(--warn);
+  --change-background-color: rgb(138 75 90 / 0.15);
+  --error-button-border-color: var(--brand);
+  --error-button-background-color: var(--brand);
+  --error-button-color: #ffffff;
+  --submit-button-border-color: var(--brand);
+  --submit-button-background-color: var(--brand);
+  --submit-button-color: #ffffff;
+  --graph-opacity: 1;
+  --graph-filter: none;
+}
+
+body {
+  font-family: "Lato", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--brand);
+}
+
+.container {
+  padding: 0 1rem;
+}
+@media (min-width: 640px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+}
+
+/* ---- Header bar: white, hairline border, shadow-sm, logo left, CTA right (cat's navbar) ---- */
+
+nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 1px 3px rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+}
+nav .container ul a {
+  padding: 1.25rem 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 400;
+  color: var(--ink);
+}
+nav .container ul a[aria-current] {
+  color: var(--brand);
+  font-weight: 700;
+  border-bottom-width: 2px;
+}
+nav .container ul li:last-child a {
+  margin-left: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 0.75rem;
+  background: var(--brand);
+  color: #ffffff;
+}
+nav .container a.logo {
+  padding: 0.75rem 0;
+  margin-right: 1rem;
+}
+/* Nav.svelte's scoped ".logo img" outranks any selector without two classes on the img */
+nav .container a.logo img {
+  height: 2rem !important;
+  margin-right: 0 !important;
+  border-radius: 0 !important;
+}
+
+/* ---- Intro ---- */
+
+main > header h1 {
+  margin-top: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.8);
+}
+main > header p.lead {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+@media (min-width: 640px) {
+  main > header h1 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Section titles ("Live Status", "Past Incidents", "Response time") — cat's COLLECTION heading */
+h2 {
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgb(0 0 0 / 0.8);
+}
+h3 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ink-soft);
+  opacity: 1;
+}
+h4 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+/* ---- Cards ---- */
+
+article {
+  border-radius: 1rem;
+  border-left-width: 1px;
+  padding: 1rem 1.25rem;
+}
+article.up,
+article.down,
+article.degraded {
+  border-left-width: 1px;
+}
+article + article {
+  margin-top: 0.75rem;
+}
+
+/* "All systems are operational" banner */
+main > article.up {
+  margin-bottom: 2rem;
+  background: #f0fdf4;
+  border-color: #bbf7d0;
+  border-left-color: #bbf7d0 !important;
+  color: #166534;
+  font-weight: 700;
+}
+
+/* Live status rows: a coloured dot replaces Upptime's left border and the site favicon */
+.live-status article h4 img.icon {
+  display: none;
+}
+.live-status article h4::before,
+main article.down h4::before {
+  content: "";
+  display: inline-block;
+  width: 0.55rem;
+  height: 0.55rem;
+  margin-right: 0.55rem;
+  border-radius: 999px;
+  vertical-align: 0.1rem;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px rgb(22 163 74 / 0.15);
+}
+.live-status article.down h4::before,
+main article.down h4::before {
+  background: var(--bad);
+  box-shadow: 0 0 0 3px rgb(220 38 38 / 0.15);
+}
+.live-status article.degraded h4::before,
+main article.degraded h4::before {
+  background: var(--warn);
+  box-shadow: 0 0 0 3px rgb(217 119 6 / 0.15);
+}
+/* Upptime tints only the left edge of a failing card; with rounded corners the whole border reads better */
+.live-status article.down {
+  border-color: #fecaca;
+  background: #fffafa;
+}
+.live-status article.degraded {
+  border-color: #fde68a;
+  background: #fffdf5;
+}
+.live-status article h4 a {
+  color: var(--ink);
+}
+.live-status article > div {
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+.live-status article .data {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+/* Response-time sparkline. Upptime renders it as a teal PNG (hardcoded in @upptime/graphs) set as
+   the card's background; the PNG is transparent, so it is used as a MASK over a brand gradient
+   instead — the shape stays, the colour becomes Runa's. raw.githubusercontent.com sends
+   Access-Control-Allow-Origin: *, which a cross-origin mask-image requires. */
+.live-status article.graph {
+  background-image: none !important;
+  isolation: isolate;
+  overflow: hidden;
+}
+.live-status article.graph::before {
+  content: "";
+  position: absolute;
+  top: 0.75rem;
+  right: 1rem;
+  bottom: 0;
+  width: 45%;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(to top, rgb(138 75 90 / 0.1), rgb(138 75 90 / 0.45));
+  -webkit-mask: var(--background) right bottom / contain no-repeat;
+  mask: var(--background) right bottom / contain no-repeat;
+}
+@media (max-width: 480px) {
+  .live-status article.graph::before {
+    width: 35%;
+  }
+}
+
+/* 24h / 7d / 30d / 1y / all — cat's filter chips */
+main form.r label {
+  display: inline-block;
+  margin-left: 0.35rem !important;
+  padding: 0.25rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+main form.r input:checked + label {
+  border-color: var(--brand);
+  background: var(--brand);
+  color: #ffffff;
+  font-weight: 700 !important;
+}
+/* LiveStatus's title row is a direct child of main; incident cards reuse .f inside themselves */
+main > div.f {
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+main > div.f > h2 {
+  margin: 0;
+}
+
+/* ---- Tags, incident pages, history pages ---- */
+
+.tag {
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+section > h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+section > h1 a {
+  color: var(--ink);
+}
+dl dt {
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+dl dd {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+a.error-button,
+.submit-button {
+  border-radius: 1rem;
+}
+
+.loading svg {
+  stroke: var(--brand);
+}
+
+footer {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+}
