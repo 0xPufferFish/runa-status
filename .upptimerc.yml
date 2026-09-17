@@ -4,6 +4,13 @@
 owner: 0xPufferFish
 repo: runa-status
 
+# WHAT THESE BODY CHECKS CANNOT SEE: the string each one asserts lives in index.html, which is
+# served perfectly when the app is completely broken — it is the JavaScript that fails. Both
+# blank-page reports on 2026-09-17 passed every check here. Real browsers now report that class
+# themselves (POST /client-error, kind: boot_timeout -> panda's System page); nothing synthetic
+# does, and Upptime cannot, because it does not run JavaScript. A check added here must assert on
+# something only a BOOTED app produces, or it is measuring the web server, not the shop.
+
 sites:
   # The catalog SPA shell. The body is checked because on 2026-09-11 the host rebooted and served
   # DomaiNesia's "your domain is ready" parking page with a 200.
@@ -25,8 +32,12 @@ sites:
   # block. The logo is the one storage file no attire edit can delete (it is cat's og:image).
   - name: Photos (storage)
     url: https://api.runarent.com/storage/v1/logo.webp
+  # admin. replaces panda. at cutover (MIGRATION.md 5b step 2) — the old Flutter admin it
+  # serves today is dropped. Do NOT merge this before the cutover: admin. currently returns
+  # that Flutter build, which happens to carry the same <title>, so this check would go
+  # falsely green against the wrong application.
   - name: Panda (admin)
-    url: https://panda.runarent.com/
+    url: https://admin.runarent.com/
     __dangerous__body_down_if_text_missing: Runa Panda
 
 assignees:
