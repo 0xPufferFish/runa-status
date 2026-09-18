@@ -32,10 +32,9 @@ sites:
   # block. The logo is the one storage file no attire edit can delete (it is cat's og:image).
   - name: Photos (storage)
     url: https://api.runarent.com/storage/v1/logo.webp
-  # admin. replaces panda. at cutover (MIGRATION.md 5b step 2) — the old Flutter admin it
-  # serves today is dropped. Do NOT merge this before the cutover: admin. currently returns
-  # that Flutter build, which happens to carry the same <title>, so this check would go
-  # falsely green against the wrong application.
+  # admin. replaced panda. at the cutover to runa-1 (2026-09-19); panda. is gone. Until then
+  # admin. served the old Flutter admin, which carries the same <title> — so this check could
+  # not tell the two apps apart, and still cannot if that build ever came back.
   - name: Panda (admin)
     url: https://admin.runarent.com/
     __dangerous__body_down_if_text_missing: Runa Panda
