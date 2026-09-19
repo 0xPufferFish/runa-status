@@ -24,7 +24,8 @@ sites:
   - name: Catalog standby (catalog.runarent.com)
     url: https://catalog.runarent.com/
     __dangerous__body_down_if_text_missing: Runa Rent
-  # The API under the hostname both frontends call. /attire/attributes is what cat fetches at boot: it
+  # The API's www. alias — what both frontends called from the 2026-09-14 block until the cutover
+  # (they call api.runarent.com since), kept because it is still in DNS. /attire/attributes is what cat fetches at boot: it
   # runs a dozen DB queries, so a DB outage answers 500 here. It records no telemetry — the list and
   # detail routes record search / attire_view events, which a probe must never inflate.
   - name: API (www.api.runarent.com)
@@ -41,9 +42,9 @@ sites:
   # behind a warm cache, can stay green here as it does for customers viewing cached photos.
   - name: Photos (R2)
     url: https://media.runarent.com/storage/v1/logo.webp
-  # The same library straight off runa-1's disk (Caddy, not Node). Still live: the catalog's logo,
-  # guide images and fallback banners load from here, and it is where media fails over to
-  # (`runa-media-origin local`), so it must stay green while unused.
+  # The same library straight off runa-1's disk (Caddy, not Node). It is where media fails over to
+  # (`runa-media-origin local`), and the catalog's compiled fallback images still point here, so it
+  # must stay green while unused.
   - name: Photos (runa-1)
     slug: photos-storage  # its name until 2026-09-19; the slug keeps its history
     url: https://api.runarent.com/storage/v1/logo.webp
