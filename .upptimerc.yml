@@ -81,7 +81,8 @@ status-website:
   introTitle: "Status layanan Runa Rent"
   introMessage: Diperiksa otomatis setiap 5 menit.
   navbar:
+    # Used verbatim — the template's `/` ignores baseUrl and pointed at 0xpufferfish.github.io itself.
     - title: Status
-      href: /
+      href: /runa-status/
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
