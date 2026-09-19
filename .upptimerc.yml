@@ -28,9 +28,17 @@ sites:
   - name: API (api.runarent.com)
     url: https://api.runarent.com/v1/attire/attributes
     __dangerous__body_down_if_text_missing: '"msg":"OK"'
-  # Photos are served by Apache straight off disk, not by Node — they kept serving through the 09-14
-  # block. The logo is the one storage file no attire edit can delete (it is cat's og:image).
-  - name: Photos (storage)
+  # Customers' photos and videos come from Cloudflare R2 since 2026-09-19 (MIGRATION.md step 4). The
+  # logo is the one storage file no attire edit can delete. This goes through Cloudflare's cache, so
+  # it proves the domain, the certificate and the edge serve the library — an outage of R2 alone,
+  # behind a warm cache, can stay green here as it does for customers viewing cached photos.
+  - name: Photos (R2)
+    url: https://media.runarent.com/storage/v1/logo.webp
+  # The same library straight off runa-1's disk (Caddy, not Node). Still live: the catalog's logo,
+  # guide images and fallback banners load from here, and it is where media fails over to
+  # (`runa-media-origin local`), so it must stay green while unused.
+  - name: Photos (runa-1)
+    slug: photos-storage  # its name until 2026-09-19; the slug keeps its history
     url: https://api.runarent.com/storage/v1/logo.webp
   # admin. replaced panda. at the cutover to runa-1 (2026-09-19); panda. is gone. Until then
   # admin. served the old Flutter admin, which carries the same <title> — so this check could
