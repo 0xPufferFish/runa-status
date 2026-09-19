@@ -17,6 +17,13 @@ sites:
   - name: Catalog (runarent.com)
     url: https://runarent.com/
     __dangerous__body_down_if_text_missing: Runa Rent
+  # The catalog's STANDBY copy on runa-1, under its own DNS-only name (runa-ops CLAUDE.md
+  # "Architecture"). Once runarent.com is served by Cloudflare, this is the only outside view of
+  # the copy a failover would switch to — and the address customers are sent to when Cloudflare
+  # is down, so it must be green while unused.
+  - name: Catalog standby (catalog.runarent.com)
+    url: https://catalog.runarent.com/
+    __dangerous__body_down_if_text_missing: Runa Rent
   # The API under the hostname both frontends call. /attire/attributes is what cat fetches at boot: it
   # runs a dozen DB queries, so a DB outage answers 500 here. It records no telemetry — the list and
   # detail routes record search / attire_view events, which a probe must never inflate.
