@@ -17,12 +17,11 @@ sites:
   - name: Catalog (runarent.com)
     url: https://runarent.com/
     __dangerous__body_down_if_text_missing: Runa Rent
-  # The same copy under its own name. Since 2026-09-20 runa-1 serves the catalog itself, so this
-  # and the check above hit the same box — it stays because it is the address customers are sent
-  # to in an emergency, and because it is the check that survives runarent.com being repointed.
-  # NOTE: the Cloudflare Worker is the standby now and NOTHING here watches it; no public hostname
-  # reaches it while the proxy is off (runa-ops CLAUDE.md "Architecture" says to probe it by hand
-  # after switching over).
+  # The STANDBY copy: since 2026-09-20 this name is proxied and carries a route of the production
+  # Worker, so this check is the outside view of Cloudflare's copy while runa-1 serves customers
+  # (the check above). Between the two, whichever copy is not in use is still being watched — which
+  # is the whole point of a standby. It answers `noindex` by design; that does not affect this
+  # check, which only reads the body.
   - name: Catalog standby (catalog.runarent.com)
     url: https://catalog.runarent.com/
     __dangerous__body_down_if_text_missing: Runa Rent
