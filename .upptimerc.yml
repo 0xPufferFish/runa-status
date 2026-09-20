@@ -37,15 +37,14 @@ sites:
   - name: API (api.runarent.com)
     url: https://api.runarent.com/v1/attire/attributes
     __dangerous__body_down_if_text_missing: '"msg":"OK"'
-  # Customers' photos and videos come from Cloudflare R2 since 2026-09-19 (MIGRATION.md step 4). The
-  # logo is the one storage file no attire edit can delete. This goes through Cloudflare's cache, so
-  # it proves the domain, the certificate and the edge serve the library — an outage of R2 alone,
-  # behind a warm cache, can stay green here as it does for customers viewing cached photos.
+  # The STANDBY photo library in R2 (customers have come off runa-1 since 2026-09-20). The logo is
+  # the one storage file no attire edit can delete. It goes through Cloudflare's cache, so it proves
+  # the domain, the certificate and the edge still serve the library — an outage of R2 alone, behind
+  # a warm cache, can stay green here.
   - name: Photos (R2)
     url: https://media.runarent.com/storage/v1/logo.webp
-  # The same library straight off runa-1's disk (Caddy, not Node). It is where media fails over to
-  # (`runa-media-origin local`), and the catalog's compiled fallback images still point here, so it
-  # must stay green while unused.
+  # The library customers actually load, straight off runa-1's disk (Caddy, not Node) since
+  # 2026-09-20. Red here means broken photos on the live site.
   - name: Photos (runa-1)
     slug: photos-storage  # its name until 2026-09-19; the slug keeps its history
     url: https://api.runarent.com/storage/v1/logo.webp
