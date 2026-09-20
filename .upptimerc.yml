@@ -41,17 +41,19 @@ sites:
   # the one storage file no attire edit can delete. It goes through Cloudflare's cache, so it proves
   # the domain, the certificate and the edge still serve the library — an outage of R2 alone, behind
   # a warm cache, can stay green here.
-  - name: Photos (R2)
+  - name: Media (R2)
+    slug: photos-r2  # its name until 2026-09-20; the slug keeps its history
     url: https://media.runarent.com/storage/v1/logo.webp
   # The library customers actually load, straight off runa-1's disk (Caddy, not Node) since
   # 2026-09-20. Red here means broken photos on the live site.
-  - name: Photos (runa-1)
+  - name: Media (runa-1)
     slug: photos-storage  # its name until 2026-09-19; the slug keeps its history
     url: https://api.runarent.com/storage/v1/logo.webp
   # admin. replaced panda. at the cutover to runa-1 (2026-09-19); panda. is gone. Until then
   # admin. served the old Flutter admin, which carries the same <title> — so this check could
   # not tell the two apps apart, and still cannot if that build ever came back.
-  - name: Panda (admin)
+  - name: Admin
+    slug: panda-admin  # its name until 2026-09-20; the slug keeps its history
     url: https://admin.runarent.com/
     __dangerous__body_down_if_text_missing: Runa Panda
 
