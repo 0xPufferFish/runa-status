@@ -17,10 +17,12 @@ sites:
   - name: Catalog (runarent.com)
     url: https://runarent.com/
     __dangerous__body_down_if_text_missing: Runa Rent
-  # The catalog's STANDBY copy on runa-1, under its own DNS-only name (runa-ops CLAUDE.md
-  # "Architecture"). Once runarent.com is served by Cloudflare, this is the only outside view of
-  # the copy a failover would switch to — and the address customers are sent to when Cloudflare
-  # is down, so it must be green while unused.
+  # The same copy under its own name. Since 2026-09-20 runa-1 serves the catalog itself, so this
+  # and the check above hit the same box — it stays because it is the address customers are sent
+  # to in an emergency, and because it is the check that survives runarent.com being repointed.
+  # NOTE: the Cloudflare Worker is the standby now and NOTHING here watches it; no public hostname
+  # reaches it while the proxy is off (runa-ops CLAUDE.md "Architecture" says to probe it by hand
+  # after switching over).
   - name: Catalog standby (catalog.runarent.com)
     url: https://catalog.runarent.com/
     __dangerous__body_down_if_text_missing: Runa Rent
