@@ -49,6 +49,26 @@ sites:
   - name: Media (runa-1)
     slug: photos-storage  # its name until 2026-09-19; the slug keeps its history
     url: https://api.runarent.com/storage/v1/logo.webp
+  # The sitemap, which is the closest thing here to a check that sees past the shell. It is
+  # written at BUILD time by cat-vue scripts/gen-sitemap.mjs from a live GET /attire, and that
+  # script is deliberately allowed to fail soft — an unreachable API leaves a sitemap of four
+  # static routes and the deploy ships anyway, which is right for the deploy and worth knowing
+  # about afterwards. So a missing product URL here means the last build could not see the
+  # catalog. It does NOT prove the app boots in a browser; nothing synthetic here does.
+  - name: Catalog sitemap
+    url: https://runarent.com/sitemap.xml
+    __dangerous__body_down_if_text_missing: '<loc>https://runarent.com/detail/'
+  # The whole shop going dark in search is silent everywhere else. 40-web.sh applied with
+  # RUNA_NOINDEX=1 against production would serve `Disallow: /` here, and cat-vue's
+  # cloudflare-headers.sh would faithfully copy that robots.txt to the standby — both copies
+  # delisted, every other check on this page still green. This is the one that notices.
+  # `Sitemap:` must be present; `Disallow:` must not appear at all (production disallows
+  # NOTHING on purpose — see cat-vue/public/robots.txt for why a Disallow would be worse than
+  # useless here).
+  - name: Catalog robots.txt
+    url: https://runarent.com/robots.txt
+    __dangerous__body_down_if_text_missing: 'Sitemap:'
+    __dangerous__body_down_if_text_found: 'Disallow:'
   # admin. replaced panda. at the cutover to runa-1 (2026-09-19); panda. is gone. Until then
   # admin. served the old Flutter admin, which carries the same <title> — so this check could
   # not tell the two apps apart, and still cannot if that build ever came back.
